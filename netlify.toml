@@ -1,0 +1,26 @@
+# Netlify build + functions config. The whole app (frontend + API) ships as one
+# site: Next.js is the published frontend, and everything under
+# netlify/functions is exposed at /api/* via the redirect below.
+
+[build]
+  command = "pnpm build"
+  publish = "frontend/.next"
+
+# Local `netlify dev`: run the Next.js frontend and proxy to it. Pinned so the
+# CLI does not prompt to pick a workspace package.
+[dev]
+  command = "pnpm --filter frontend dev"
+  framework = "next"
+  targetPort = 3000
+  port = 8888
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Frontend calls the backend at the relative path /api/*, same origin in dev and
+# in production. No API URL to configure.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

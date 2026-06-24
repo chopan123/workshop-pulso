@@ -1,0 +1,4 @@
+packages:
+  - frontend
+  - netlify/functions
+  - packages/*
