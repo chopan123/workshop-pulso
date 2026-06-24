@@ -20,7 +20,7 @@ The workshop is split into two steps:
 - A [Privy](https://dashboard.privy.io/) account and App ID
 - A [DeFindex](https://defindex.io/) account / API key (Step 2)
 - A [Netlify](https://www.netlify.com/) account for deployment
-- Basic familiarity with React and the Stellar testnet
+- Basic familiarity with React and Stellar (testnet for the workshop, mainnet for production)
 
 ## Architecture
 
@@ -50,7 +50,7 @@ Chosen so the whole app deploys to Netlify with one build and `pnpm`.
 | Frontend         | [Next.js](https://nextjs.org/) (App Router)           |
 | Backend          | [Netlify Functions](https://docs.netlify.com/functions/overview/) (TypeScript) |
 | Auth + Wallets   | [Privy](https://www.privy.io/)                        |
-| Blockchain       | [Stellar](https://stellar.org/) (testnet)             |
+| Blockchain       | [Stellar](https://stellar.org/) (testnet + mainnet)   |
 | Yield / Vaults   | [DeFindex](https://defindex.io/)                      |
 | Hosting          | [Netlify](https://www.netlify.com/)                   |
 
@@ -66,7 +66,7 @@ Chosen so the whole app deploys to Netlify with one build and `pnpm`.
 Goal: a web app where a user logs in (email / social / passkey) and gets an
 embedded Stellar wallet they can fund and send from.
 
-**Backend**
+### Wallet backend
 
 1. **Scaffold the functions** and configure the Privy server SDK with your App
    ID and secret.
@@ -74,7 +74,7 @@ embedded Stellar wallet they can fund and send from.
    `POST /api/wallet/fund` (testnet), `POST /api/payments`.
 3. **Keep secrets server-side** — only the public App ID reaches the browser.
 
-**Frontend**
+### Wallet frontend
 
 1. **Scaffold the app** and install the Privy React SDK.
 2. **Add login** — wrap the app in the Privy provider and add a connect button.
@@ -89,14 +89,14 @@ embedded Stellar wallet they can fund and send from.
 Goal: let users deposit into a DeFindex vault from the wallet and track their
 yield.
 
-**Backend**
+### Vaults backend
 
 1. **Get DeFindex API access** and store the API key server-side.
 2. **Wrap the DeFindex API** behind your own endpoints, e.g.
    `GET /api/vaults`, `POST /api/vaults/deposit`, `GET /api/vaults/position`,
    `POST /api/vaults/withdraw`.
 
-**Frontend**
+### Vaults frontend
 
 1. **List vaults** by calling the backend.
 2. **Deposit** funds from the user's wallet into a vault.
@@ -169,8 +169,13 @@ Public values (exposed to the Next.js frontend):
 
 ```bash
 NEXT_PUBLIC_PRIVY_APP_ID=   # public App ID for the Privy React SDK
+NEXT_PUBLIC_STELLAR_NETWORK=testnet   # "testnet" or "mainnet"
 ```
 
+> Use `testnet` to follow the workshop with Friendbot-funded accounts. Switch to
+> `mainnet` for a production deployment — same code, real funds. Note Friendbot
+> funding only exists on testnet.
+>
 > The frontend calls the backend at the relative path `/api/*`, so there's no
 > API URL to configure — same origin in dev and in production.
 
