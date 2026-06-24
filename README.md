@@ -44,15 +44,15 @@ and API — deploys to Netlify as a single site with no separate server to host.
 
 Chosen so the whole app deploys to Netlify with one build and `pnpm`.
 
-| Concern          | Tool                                                  |
-| ---------------- | ----------------------------------------------------- |
-| Monorepo         | [pnpm workspaces](https://pnpm.io/workspaces)         |
-| Frontend         | [Next.js](https://nextjs.org/) (App Router)           |
-| Backend          | [Netlify Functions](https://docs.netlify.com/functions/overview/) (TypeScript) |
-| Auth + Wallets   | [Privy](https://www.privy.io/)                        |
-| Blockchain       | [Stellar](https://stellar.org/) (testnet + mainnet)   |
-| Yield / Vaults   | [DeFindex](https://defindex.io/)                      |
-| Hosting          | [Netlify](https://www.netlify.com/)                   |
+| Concern        | Tool                                                                           |
+| -------------- | ------------------------------------------------------------------------------ |
+| Monorepo       | [pnpm workspaces](https://pnpm.io/workspaces)                                  |
+| Frontend       | [Next.js](https://nextjs.org/) (App Router)                                    |
+| Backend        | [Netlify Functions](https://docs.netlify.com/functions/overview/) (TypeScript) |
+| Auth + Wallets | [Privy](https://www.privy.io/)                                                 |
+| Blockchain     | [Stellar](https://stellar.org/) (testnet + mainnet)                            |
+| Yield / Vaults | [DeFindex](https://defindex.io/)                                               |
+| Hosting        | [Netlify](https://www.netlify.com/)                                            |
 
 > **Why Netlify Functions instead of a standalone Express server?** Netlify
 > hosts static sites + serverless functions, not long-running processes. Making
