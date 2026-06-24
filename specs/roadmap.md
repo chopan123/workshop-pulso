@@ -16,14 +16,22 @@ focused, shippable chunk. Phases map toward the workshop branches:
 
 ## Stage 1 — Wallet (branch: `step-1`)
 
-- [ ] **P1.1 — Privy provider.** Wrap the frontend in the Privy React provider using
-  `NEXT_PUBLIC_PRIVY_APP_ID`.
-- [ ] **P1.2 — Login.** Connect/login button; show authenticated vs. logged-out
-  state.
-- [ ] **P1.3 — Embedded Stellar wallet.** Enable the embedded Stellar wallet; read
-  and display the user's address.
-- [ ] **P1.4 — Privy server SDK.** Configure the Privy server SDK in functions
-  (`PRIVY_APP_ID` + `PRIVY_APP_SECRET`).
+Architecture (hybrid): the frontend uses Privy **only to authenticate** (client
+email OTP). Every wallet/DeFindex action goes through our `/api/*`; the backend
+verifies the Privy access token and operates the user's Stellar wallet
+server-side via the `user_jwt` exchange. Secrets stay server-side.
+
+- [ ] **P1.1 — Privy provider (auth only).** Wrap the frontend in the Privy React
+  provider (`NEXT_PUBLIC_PRIVY_APP_ID`), email login only — no wallet logic in the
+  browser.
+- [ ] **P1.2 — Login.** Email OTP login button; show authenticated vs. logged-out
+  state. Frontend obtains the Privy access token to send to `/api/*`.
+- [ ] **P1.3 — Privy server client.** Configure the Privy server SDK in functions
+  (`PRIVY_APP_ID` + `PRIVY_APP_SECRET`); `GET /api/auth/me` verifies the access
+  token server-side.
+- [ ] **P1.4 — Server Stellar wallet.** Backend provisions/reads the user's Stellar
+  wallet via the server SDK (`user_jwt` exchange); `GET /api/wallet` → frontend
+  displays the address.
 - [ ] **P1.5 — Balance endpoint.** `GET /api/wallet/balance` → frontend shows
   balance.
 - [ ] **P1.6 — Fund on testnet.** `POST /api/wallet/fund` (Friendbot) + UI button.
