@@ -1,0 +1,17 @@
+{
+  "name": "workshop-pulso",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "netlify dev --filter frontend",
+    "build": "pnpm --filter frontend build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@workshop-pulso/functions",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@workshop-pulso/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.6.0",
+    "@types/node": "^20.12.0",
+    "typescript": "^5.4.0"
+  }
+}
