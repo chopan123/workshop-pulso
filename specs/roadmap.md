@@ -32,10 +32,10 @@ server-side via the `user_jwt` exchange. Secrets stay server-side.
 - [x] **P1.4 — Server Stellar wallet.** Backend provisions/reads the user's Stellar
   wallet via the server SDK (`user_jwt` exchange); `GET /api/wallet` → frontend
   displays the address.
-- [ ] **P1.5 — Balance endpoint.** `GET /api/wallet/balance` → frontend shows
+- [x] **P1.5 — Balance endpoint.** `GET /api/wallet/balance` → frontend shows
   balance.
-- [ ] **P1.6 — Fund on testnet.** `POST /api/wallet/fund` (Friendbot) + UI button.
-- [ ] **P1.7 — Send payment.** `POST /api/payments` + a simple send form.
+- [x] **P1.6 — Fund on testnet.** `POST /api/wallet/fund` (Friendbot) + UI button.
+- [x] **P1.7 — Send payment.** `POST /api/payments` + a simple send form.
 
 ## Stage 2 — DeFindex vaults (branch: `step-2`)
 
