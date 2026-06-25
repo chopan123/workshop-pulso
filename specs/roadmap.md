@@ -63,14 +63,19 @@ professional-yet-accessible tone, no aggressive "crypto" aesthetics.
 - [x] **P2.5 — Restyle existing controls.** Apply the brand styling to the
   existing login / fund / send controls (Coral CTAs, glassmorphism cards).
 
-## Stage 3 — DeFindex vaults (branch: `step-3`)
+## Stage 3 — DeFindex vault (branch: `step-3`)
 
-- [ ] **P3.1 — DeFindex client.** Configure the DeFindex API key server-side; small
-  client wrapper in functions.
-- [ ] **P3.2 — List vaults.** `GET /api/vaults` → frontend lists available vaults.
-- [ ] **P3.3 — Deposit.** `POST /api/vaults/deposit` + deposit UI.
-- [ ] **P3.4 — Position.** `GET /api/vaults/position` → show balance & APY.
-- [ ] **P3.5 — Withdraw.** `POST /api/vaults/withdraw` + withdraw UI.
+We interact with a single, fixed vault rather than discovering/listing vaults.
+Vault address (testnet):
+`CCLV4H7WTLJQ7ATLHBBQV2WW3OINF3FOY5XZ7VPHZO7NH3D2ZS4GFSF6`. Configure it
+server-side (e.g. `DEFINDEX_VAULT_ADDRESS`) so the API key never reaches the
+browser.
+
+- [x] **P3.1 — DeFindex client.** Configure the DeFindex API key server-side; small
+  client wrapper in functions. Pin the vault address as config.
+- [x] **P3.2 — Deposit.** `POST /api/vaults/deposit` + deposit UI.
+- [x] **P3.3 — Position.** `GET /api/vaults/position` → show balance & APY.
+- [x] **P3.4 — Withdraw.** `POST /api/vaults/withdraw` + withdraw UI.
 
 ## Stage 4 — Deploy
 
