@@ -4,6 +4,8 @@ A hands-on workshop for the **Pulso Hackathon**. You'll build a web wallet on
 **Stellar** using **Privy** for authentication and embedded wallets, then add
 yield-earning vaults with **DeFindex**.
 
+🔗 **Live demo:** https://resilient-churros-c913d4.netlify.app/
+
 The workshop is split into two steps:
 
 1. **Step 1 — Wallet:** A web app that lets users sign in and manage a Stellar
