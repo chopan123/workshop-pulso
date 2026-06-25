@@ -147,12 +147,13 @@ pnpm install
 # set up environment (see below)
 cp .env.example .env
 
-# run Next.js + Functions together via the Netlify CLI
-pnpm dlx netlify-cli dev
+# run Next.js + Functions together for local development
+pnpm run dev
 ```
 
-`netlify dev` serves the frontend and proxies `/api/*` to your functions, so the
-app at <http://localhost:8888> behaves exactly like production.
+`pnpm run dev` (which runs the Netlify CLI under the hood) serves the frontend
+and proxies `/api/*` to your functions, so the app at <http://localhost:8888>
+behaves exactly like production.
 
 ## Environment Variables
 
