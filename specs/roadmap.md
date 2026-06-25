@@ -2,7 +2,7 @@
 
 High-level implementation order, in very small phases. Each phase is one
 focused, shippable chunk. Phases map toward the workshop branches:
-`main` → `step-1` → `step-2`.
+`main` → `step-1` → `step-2` → `step-3`.
 
 ## Stage 0 — Foundation (branch: `main`)
 
@@ -37,17 +37,43 @@ server-side via the `user_jwt` exchange. Secrets stay server-side.
 - [x] **P1.6 — Fund on testnet.** `POST /api/wallet/fund` (Friendbot) + UI button.
 - [x] **P1.7 — Send payment.** `POST /api/payments` + a simple send form.
 
-## Stage 2 — DeFindex vaults (branch: `step-2`)
+## Stage 2 — Branding & context (branch: `step-2`)
 
-- [ ] **P2.1 — DeFindex client.** Configure the DeFindex API key server-side; small
+Apply the DeFindex visual identity to the frontend and make the page
+self-explanatory: a visitor should understand what the app is and see, at a
+glance, the current state of their session. Design follows the DeFindex media
+kit (https://docs.defindex.io/contact-us/media-kit).
+
+Brand reference: fonts **Familjen Grotesk** (headlines) + **Inter Tight** (body)
+from Google Fonts; palette Dark Green `#014751`, Lavender `#DEC9F4`, Light Green
+`#D3FFB4`, Light Cyan `#D3FBFF`, Coral `#FC5B31` (CTAs), White `#FFFFFF`; soft
+diffused gradients (cyan → light green → lavender), glassmorphism surfaces;
+professional-yet-accessible tone, no aggressive "crypto" aesthetics.
+
+- [ ] **P2.1 — Brand theme.** Wire the two Google Fonts and the palette into the
+  frontend as design tokens (CSS variables / theme); apply base typography and
+  background gradient.
+- [ ] **P2.2 — DeFindex logo.** Add the DeFindex logo (correct light/dark variant,
+  unmodified, min 40px) to the header.
+- [ ] **P2.3 — Context section.** A hero/intro that explains what the app is and
+  what it does (Stellar wallet + DeFindex), in plain language.
+- [ ] **P2.4 — Current-state panel.** Surface the live state of the front: auth
+  status, wallet address, balance, and what the user can do next — each step
+  labeled so the screen is self-describing.
+- [ ] **P2.5 — Restyle existing controls.** Apply the brand styling to the
+  existing login / fund / send controls (Coral CTAs, glassmorphism cards).
+
+## Stage 3 — DeFindex vaults (branch: `step-3`)
+
+- [ ] **P3.1 — DeFindex client.** Configure the DeFindex API key server-side; small
   client wrapper in functions.
-- [ ] **P2.2 — List vaults.** `GET /api/vaults` → frontend lists available vaults.
-- [ ] **P2.3 — Deposit.** `POST /api/vaults/deposit` + deposit UI.
-- [ ] **P2.4 — Position.** `GET /api/vaults/position` → show balance & APY.
-- [ ] **P2.5 — Withdraw.** `POST /api/vaults/withdraw` + withdraw UI.
+- [ ] **P3.2 — List vaults.** `GET /api/vaults` → frontend lists available vaults.
+- [ ] **P3.3 — Deposit.** `POST /api/vaults/deposit` + deposit UI.
+- [ ] **P3.4 — Position.** `GET /api/vaults/position` → show balance & APY.
+- [ ] **P3.5 — Withdraw.** `POST /api/vaults/withdraw` + withdraw UI.
 
-## Stage 3 — Deploy
+## Stage 4 — Deploy
 
-- [ ] **P3.1 — Netlify site.** Import repo, confirm pnpm auto-detect, set env vars.
-- [ ] **P3.2 — Branch previews.** Deploy `step-1` and `step-2` for per-stage preview
-  URLs.
+- [ ] **P4.1 — Netlify site.** Import repo, confirm pnpm auto-detect, set env vars.
+- [ ] **P4.2 — Branch previews.** Deploy `step-1`, `step-2`, and `step-3` for
+  per-stage preview URLs.
