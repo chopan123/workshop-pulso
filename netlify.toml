@@ -18,6 +18,36 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Function names can't contain slashes, so map the nested /api/auth/me path to
+# the flat `auth-me` function explicitly. This must come before the /api/*
+# catch-all below — Netlify uses the first matching redirect.
+[[redirects]]
+  from = "/api/auth/me"
+  to = "/.netlify/functions/auth-me"
+  status = 200
+
+# Nested wallet paths → flat function names (same reason as auth/me above).
+[[redirects]]
+  from = "/api/wallet/balance"
+  to = "/.netlify/functions/wallet-balance"
+  status = 200
+
+[[redirects]]
+  from = "/api/wallet/fund"
+  to = "/.netlify/functions/wallet-fund"
+  status = 200
+
+# Two-step non-custodial payment: prepare (build) then submit (broadcast).
+[[redirects]]
+  from = "/api/payments/prepare"
+  to = "/.netlify/functions/payments-prepare"
+  status = 200
+
+[[redirects]]
+  from = "/api/payments/submit"
+  to = "/.netlify/functions/payments-submit"
+  status = 200
+
 # Frontend calls the backend at the relative path /api/*, same origin in dev and
 # in production. No API URL to configure.
 [[redirects]]

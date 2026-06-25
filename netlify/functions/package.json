@@ -6,6 +6,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@privy-io/node": "^0.23.0",
+    "@stellar/stellar-sdk": "^16.0.1",
     "@workshop-pulso/shared": "workspace:*"
   },
   "devDependencies": {
