@@ -18,6 +18,14 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Function names can't contain slashes, so map the nested /api/auth/me path to
+# the flat `auth-me` function explicitly. This must come before the /api/*
+# catch-all below — Netlify uses the first matching redirect.
+[[redirects]]
+  from = "/api/auth/me"
+  to = "/.netlify/functions/auth-me"
+  status = 200
+
 # Frontend calls the backend at the relative path /api/*, same origin in dev and
 # in production. No API URL to configure.
 [[redirects]]

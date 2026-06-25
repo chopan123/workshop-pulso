@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Providers } from "@/components/privy-provider";
 
 export const metadata: Metadata = {
   title: "Workshop Pulso",
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           lineHeight: 1.5,
         }}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

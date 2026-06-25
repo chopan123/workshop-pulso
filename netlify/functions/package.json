@@ -6,6 +6,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@privy-io/node": "^0.23.0",
     "@workshop-pulso/shared": "workspace:*"
   },
   "devDependencies": {
