@@ -26,17 +26,17 @@ export function HealthStatus() {
   return (
     <section
       style={{
-        marginTop: "2rem",
-        padding: "1rem",
-        border: "1px solid #ddd",
-        borderRadius: 8,
+        marginTop: "1.5rem",
+        fontSize: "0.85rem",
+        color: "var(--df-muted)",
+        textAlign: "center",
       }}
     >
       <strong>Backend health:</strong>{" "}
       {error ? (
-        <span style={{ color: "#c00" }}>error — {error}</span>
+        <span style={{ color: "var(--df-error)" }}>error — {error}</span>
       ) : health ? (
-        <span style={{ color: "#070" }}>
+        <span style={{ color: "var(--df-success)" }}>
           {health.status} ({health.network})
         </span>
       ) : (

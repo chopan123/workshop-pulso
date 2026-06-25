@@ -50,17 +50,17 @@ from Google Fonts; palette Dark Green `#014751`, Lavender `#DEC9F4`, Light Green
 diffused gradients (cyan → light green → lavender), glassmorphism surfaces;
 professional-yet-accessible tone, no aggressive "crypto" aesthetics.
 
-- [ ] **P2.1 — Brand theme.** Wire the two Google Fonts and the palette into the
+- [x] **P2.1 — Brand theme.** Wire the two Google Fonts and the palette into the
   frontend as design tokens (CSS variables / theme); apply base typography and
   background gradient.
-- [ ] **P2.2 — DeFindex logo.** Add the DeFindex logo (correct light/dark variant,
+- [x] **P2.2 — DeFindex logo.** Add the DeFindex logo (correct light/dark variant,
   unmodified, min 40px) to the header.
-- [ ] **P2.3 — Context section.** A hero/intro that explains what the app is and
+- [x] **P2.3 — Context section.** A hero/intro that explains what the app is and
   what it does (Stellar wallet + DeFindex), in plain language.
-- [ ] **P2.4 — Current-state panel.** Surface the live state of the front: auth
+- [x] **P2.4 — Current-state panel.** Surface the live state of the front: auth
   status, wallet address, balance, and what the user can do next — each step
   labeled so the screen is self-describing.
-- [ ] **P2.5 — Restyle existing controls.** Apply the brand styling to the
+- [x] **P2.5 — Restyle existing controls.** Apply the brand styling to the
   existing login / fund / send controls (Coral CTAs, glassmorphism cards).
 
 ## Stage 3 — DeFindex vaults (branch: `step-3`)

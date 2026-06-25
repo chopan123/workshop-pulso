@@ -13,10 +13,7 @@ import type {
 } from "@workshop-pulso/shared";
 
 const panelStyle = {
-  marginTop: "2rem",
-  padding: "1rem 1.25rem",
-  border: "1px solid #ddd",
-  borderRadius: 8,
+  marginTop: "1.5rem",
 } as const;
 
 /**
@@ -171,7 +168,7 @@ export function WalletPanel() {
 
   if (!process.env.NEXT_PUBLIC_PRIVY_APP_ID) {
     return (
-      <section style={panelStyle}>
+      <section className="df-card" style={panelStyle}>
         <strong>Wallet:</strong> set <code>NEXT_PUBLIC_PRIVY_APP_ID</code> in your
         environment to enable login.
       </section>
@@ -180,31 +177,56 @@ export function WalletPanel() {
 
   if (!ready) {
     return (
-      <section style={panelStyle}>
-        <span>Loading…</span>
+      <section className="df-card" style={panelStyle}>
+        <span className="df-label">Loading…</span>
       </section>
     );
   }
 
   if (!authenticated) {
     return (
-      <section style={panelStyle}>
-        <strong>Not signed in.</strong>
-        <p>Sign in with your email to get a Stellar wallet.</p>
-        <button onClick={login}>Log in</button>
+      <section className="df-card" style={panelStyle}>
+        <span className="df-badge df-badge-off">● Not signed in</span>
+        <p style={{ margin: "0.75rem 0" }}>
+          Sign in with your email to get a Stellar wallet.
+        </p>
+        <button className="df-btn df-btn-primary" onClick={login}>
+          Log in
+        </button>
       </section>
     );
   }
 
+  // A plain-language hint for what the user should do next, derived from state.
+  const nextAction =
+    balance === null
+      ? "Loading your wallet…"
+      : Number(balance) === 0
+        ? "Your wallet is empty — fund it on testnet to get started."
+        : "You're funded — send a payment, or come back for vaults next.";
+
   return (
-    <section style={panelStyle}>
-      <strong>Signed in</strong>
-      <p style={{ margin: "0.5rem 0" }}>
+    <section className="df-card" style={panelStyle}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "0.5rem",
+        }}
+      >
+        <span className="df-badge df-badge-on">● Signed in</span>
+        <button className="df-btn df-btn-secondary" onClick={logout}>
+          Log out
+        </button>
+      </div>
+
+      <p style={{ margin: "0.6rem 0 1rem", color: "var(--df-muted)" }}>
         {user?.email?.address ?? "(email on file)"}
       </p>
 
-      <div style={{ margin: "0.5rem 0" }}>
-        <span style={{ color: "#666" }}>Stellar address: </span>
+      <div style={{ margin: "0.6rem 0" }}>
+        <div className="df-label">Stellar address</div>
         {address ? (
           <code style={{ wordBreak: "break-all" }}>{address}</code>
         ) : (
@@ -212,51 +234,83 @@ export function WalletPanel() {
         )}
       </div>
 
-      <div style={{ margin: "0.5rem 0" }}>
-        <span style={{ color: "#666" }}>Balance: </span>
-        {balance !== null ? <code>{balance} XLM</code> : <span>—</span>}
+      <div style={{ margin: "0.6rem 0" }}>
+        <div className="df-label">Balance</div>
+        {balance !== null ? (
+          <code style={{ fontSize: "1.1rem" }}>{balance} XLM</code>
+        ) : (
+          <span>—</span>
+        )}
       </div>
 
-      <div style={{ margin: "0.5rem 0" }}>
-        <button onClick={onFund} disabled={busy !== null}>
+      <p
+        style={{
+          margin: "0.75rem 0",
+          padding: "0.6rem 0.8rem",
+          borderRadius: 10,
+          background: "rgba(211, 255, 180, 0.4)",
+          fontSize: "0.9rem",
+        }}
+      >
+        Next: {nextAction}
+      </p>
+
+      <div style={{ margin: "0.75rem 0" }}>
+        <button
+          className="df-btn df-btn-primary"
+          onClick={onFund}
+          disabled={busy !== null}
+        >
           {busy === "fund" ? "Funding…" : "Fund on testnet"}
         </button>
       </div>
 
-      <form onSubmit={onSend} style={{ margin: "0.75rem 0" }}>
+      <form onSubmit={onSend} style={{ margin: "1rem 0 0.25rem" }}>
         <div style={{ marginBottom: "0.5rem", fontWeight: 600 }}>Send XLM</div>
         <input
+          className="df-input"
           type="text"
           placeholder="Destination address (G…)"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
-          style={{ display: "block", width: "100%", marginBottom: "0.5rem" }}
+          style={{ marginBottom: "0.5rem" }}
           required
         />
         <input
+          className="df-input"
           type="text"
           inputMode="decimal"
           placeholder="Amount (XLM)"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          style={{ display: "block", width: "100%", marginBottom: "0.5rem" }}
+          style={{ marginBottom: "0.5rem" }}
           required
         />
-        <button type="submit" disabled={busy !== null}>
+        <button
+          className="df-btn df-btn-primary"
+          type="submit"
+          disabled={busy !== null}
+        >
           {busy === "send" ? "Sending…" : "Send"}
         </button>
       </form>
 
       {verified && (
-        <p style={{ margin: "0.5rem 0", color: "#070" }}>
+        <p style={{ margin: "0.75rem 0 0", color: "var(--df-success)" }}>
           server verified ✓ <code>{verified}</code>
         </p>
       )}
 
-      {notice && <p style={{ color: "#070" }}>{notice}</p>}
-      {error && <p style={{ color: "#c00" }}>error — {error}</p>}
-
-      <button onClick={logout}>Log out</button>
+      {notice && (
+        <p style={{ color: "var(--df-success)", margin: "0.5rem 0 0" }}>
+          {notice}
+        </p>
+      )}
+      {error && (
+        <p style={{ color: "var(--df-error)", margin: "0.5rem 0 0" }}>
+          error — {error}
+        </p>
+      )}
     </section>
   );
 }
