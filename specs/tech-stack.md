@@ -54,6 +54,7 @@ Server-side (functions / Netlify env):
 PRIVY_APP_ID=
 PRIVY_APP_SECRET=
 DEFINDEX_API_KEY=
+DEFINDEX_VAULT_ADDRESS=   # fixed vault; defaults to the workshop testnet vault
 ```
 
 Public (Next.js frontend):
