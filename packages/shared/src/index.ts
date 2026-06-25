@@ -57,8 +57,13 @@ export interface WalletResponse {
 
 /** Static per-network Stellar configuration. */
 export interface StellarNetworkConfig {
-  /** Horizon REST base URL for balance reads and transaction submission. */
+  /** Horizon REST base URL for balance reads and classic-tx submission. */
   horizonUrl: string;
+  /**
+   * Stellar RPC base URL. Soroban (smart-contract) transactions — like the
+   * DeFindex vault deposit/withdraw — are submitted here, not through Horizon.
+   */
+  rpcUrl: string;
   /** Friendbot faucet URL; `null` on networks without a faucet (mainnet). */
   friendbotUrl: string | null;
   /** Network passphrase used when signing transactions. */
@@ -72,11 +77,13 @@ export interface StellarNetworkConfig {
 export const STELLAR_NETWORKS: Record<StellarNetwork, StellarNetworkConfig> = {
   testnet: {
     horizonUrl: "https://horizon-testnet.stellar.org",
+    rpcUrl: "https://soroban-testnet.stellar.org",
     friendbotUrl: "https://friendbot.stellar.org",
     networkPassphrase: "Test SDF Network ; September 2015",
   },
   mainnet: {
     horizonUrl: "https://horizon.stellar.org",
+    rpcUrl: "https://mainnet.sorobanrpc.com",
     friendbotUrl: null,
     networkPassphrase: "Public Global Stellar Network ; September 2017",
   },
@@ -136,6 +143,65 @@ export interface PaymentSubmitRequest {
 /** Response shape for `POST /api/payments/submit`. */
 export interface PaymentSubmitResponse {
   /** Stellar transaction hash once broadcast. */
+  hash: string;
+  network: StellarNetwork;
+}
+
+/**
+ * Stage 3 — DeFindex vault. The app talks to a single, fixed vault (pinned
+ * server-side) whose only underlying asset is XLM. Deposits and withdrawals are
+ * Soroban contract calls: DeFindex builds the unsigned XDR, the user's browser
+ * signs the hash, and the backend submits it through Stellar RPC.
+ */
+
+/** The caller's position in the vault, for `GET /api/vaults/position`. */
+export interface VaultPosition {
+  /** Vault shares the user owns (dfTokens), as a string. */
+  dfTokens: string;
+  /** Current value of those shares in XLM, e.g. `"12.5000000"`. */
+  underlyingXlm: string;
+  /** The vault's 7-day APY as a percentage, e.g. `4.2`. */
+  apy: number;
+}
+
+/** Response shape for `GET /api/vaults/position`. */
+export interface VaultPositionResponse {
+  position: VaultPosition;
+  network: StellarNetwork;
+}
+
+/**
+ * Request body for `POST /api/vaults/deposit/prepare` and
+ * `POST /api/vaults/withdraw/prepare`. One XLM amount; the asset is always XLM.
+ */
+export interface VaultPrepareRequest {
+  /** Amount of XLM as a string, e.g. `"5"`. */
+  amount: string;
+}
+
+/** Response shape for the vault prepare endpoints (deposit / withdraw). */
+export interface VaultPrepareResponse {
+  /** The unsigned Soroban transaction, base64 XDR — handed back at submit time. */
+  xdr: string;
+  /** The transaction hash to sign, `0x`-prefixed hex (for `signRawHash`). */
+  hash: string;
+  network: StellarNetwork;
+}
+
+/**
+ * Request body for `POST /api/vaults/deposit/submit` and
+ * `POST /api/vaults/withdraw/submit`.
+ */
+export interface VaultSubmitRequest {
+  /** The unsigned transaction XDR returned by the matching prepare endpoint. */
+  xdr: string;
+  /** The user's signature over the tx hash, `0x`-prefixed hex. */
+  signature: string;
+}
+
+/** Response shape for the vault submit endpoints (deposit / withdraw). */
+export interface VaultSubmitResponse {
+  /** Stellar transaction hash once broadcast via RPC. */
   hash: string;
   network: StellarNetwork;
 }

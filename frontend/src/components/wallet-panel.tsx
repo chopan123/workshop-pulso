@@ -203,7 +203,7 @@ export function WalletPanel() {
       ? "Loading your wallet…"
       : Number(balance) === 0
         ? "Your wallet is empty — fund it on testnet to get started."
-        : "You're funded — send a payment, or come back for vaults next.";
+        : "You're funded — send a payment, or deposit into a DeFindex vault below.";
 
   return (
     <section className="df-card" style={panelStyle}>

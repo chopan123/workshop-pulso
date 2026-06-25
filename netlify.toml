@@ -48,6 +48,33 @@
   to = "/.netlify/functions/payments-submit"
   status = 200
 
+# DeFindex vault (Stage 3): position read + two-step non-custodial deposit and
+# withdraw (prepare → submit). Nested paths → flat function names.
+[[redirects]]
+  from = "/api/vaults/position"
+  to = "/.netlify/functions/vaults-position"
+  status = 200
+
+[[redirects]]
+  from = "/api/vaults/deposit/prepare"
+  to = "/.netlify/functions/vaults-deposit-prepare"
+  status = 200
+
+[[redirects]]
+  from = "/api/vaults/deposit/submit"
+  to = "/.netlify/functions/vaults-deposit-submit"
+  status = 200
+
+[[redirects]]
+  from = "/api/vaults/withdraw/prepare"
+  to = "/.netlify/functions/vaults-withdraw-prepare"
+  status = 200
+
+[[redirects]]
+  from = "/api/vaults/withdraw/submit"
+  to = "/.netlify/functions/vaults-withdraw-submit"
+  status = 200
+
 # Frontend calls the backend at the relative path /api/*, same origin in dev and
 # in production. No API URL to configure.
 [[redirects]]

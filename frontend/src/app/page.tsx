@@ -1,5 +1,6 @@
 import { HealthStatus } from "@/components/health-status";
 import { WalletPanel } from "@/components/wallet-panel";
+import { VaultPanel } from "@/components/vault-panel";
 
 export default function HomePage() {
   return (
@@ -33,13 +34,14 @@ export default function HomePage() {
           <li>
             <strong>Send</strong> a payment to any Stellar address.
           </li>
-          <li style={{ color: "var(--df-muted)" }}>
-            <strong>Earn</strong> with DeFindex vaults — coming in the next step.
+          <li>
+            <strong>Earn</strong> by depositing idle XLM into a DeFindex vault.
           </li>
         </ol>
       </section>
 
       <WalletPanel />
+      <VaultPanel />
       <HealthStatus />
     </>
   );

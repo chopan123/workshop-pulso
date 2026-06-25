@@ -10,6 +10,7 @@ import {
   Keypair,
   NotFoundError,
   Operation,
+  rpc,
   Transaction,
   TransactionBuilder,
   xdr,
@@ -204,4 +205,108 @@ interface ResultCodeExtras {
 
 function messageOf(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Soroban (smart-contract) transactions — submitted via Stellar RPC.         */
+/*                                                                            */
+/* DeFindex vault deposit/withdraw are contract invocations. Unlike the       */
+/* classic payments above (Horizon), these go through Stellar RPC: DeFindex   */
+/* builds the simulated/assembled XDR, the browser signs the hash, and we     */
+/* broadcast with `rpc.Server.sendTransaction`, polling for the result.       */
+/* -------------------------------------------------------------------------- */
+
+/** XLM has 7 decimals; 1 XLM = 10,000,000 stroops. */
+const STROOPS_PER_XLM = 10_000_000;
+
+/** Convert a human XLM decimal string to integer stroops. Throws on bad input. */
+export function xlmToStroops(amount: string): number {
+  const value = Number(amount);
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new PaymentError("Amount must be a positive number");
+  }
+  return Math.round(value * STROOPS_PER_XLM);
+}
+
+/** Convert integer stroops to a human XLM decimal string (7 dp). */
+export function stroopsToXlm(stroops: number): string {
+  return (stroops / STROOPS_PER_XLM).toFixed(7);
+}
+
+/**
+ * Parse a DeFindex-built Soroban XDR and return it alongside its `0x`-prefixed
+ * hash for the browser to sign. The server never signs.
+ */
+export function hashOfSorobanXdr(
+  config: StellarNetworkConfig,
+  txXdr: string,
+): { xdr: string; hash: string } {
+  let tx: Transaction;
+  try {
+    tx = new Transaction(txXdr, config.networkPassphrase);
+  } catch (err) {
+    throw new PaymentError(`Invalid transaction from DeFindex: ${messageOf(err)}`);
+  }
+  return { xdr: txXdr, hash: `0x${tx.hash().toString("hex")}` };
+}
+
+/**
+ * Attach the user's signature to a prepared Soroban transaction and broadcast it
+ * through Stellar RPC. Mirrors `submitSignedPayment` but submits to RPC (not
+ * Horizon) since this is a contract invocation. Polls `getTransaction` until the
+ * network reports success/failure.
+ */
+export async function submitSorobanTx(
+  config: StellarNetworkConfig,
+  address: string,
+  txXdr: string,
+  signatureHex: string,
+): Promise<string> {
+  let tx: Transaction;
+  try {
+    tx = new Transaction(txXdr, config.networkPassphrase);
+  } catch (err) {
+    throw new PaymentError(`Invalid transaction: ${messageOf(err)}`);
+  }
+
+  const signature = Buffer.from(signatureHex.replace(/^0x/, ""), "hex");
+  const hint = Keypair.fromPublicKey(address).signatureHint();
+  tx.signatures.push(new xdr.DecoratedSignature({ hint, signature }));
+
+  const server = new rpc.Server(config.rpcUrl);
+
+  let sent: Awaited<ReturnType<typeof server.sendTransaction>>;
+  try {
+    sent = await server.sendTransaction(tx);
+  } catch (err) {
+    throw new PaymentError(`Could not submit the transaction: ${messageOf(err)}`);
+  }
+
+  if (sent.status === "ERROR") {
+    throw new PaymentError(
+      `Stellar RPC rejected the transaction: ${JSON.stringify(sent.errorResult ?? sent)}`,
+    );
+  }
+
+  return pollSorobanResult(server, sent.hash);
+}
+
+/** Poll RPC for a submitted tx until it settles, then return its hash. */
+async function pollSorobanResult(
+  server: rpc.Server,
+  hash: string,
+): Promise<string> {
+  // ~30s budget: contract txns usually settle within a few ledgers (5s each).
+  for (let attempt = 0; attempt < 15; attempt++) {
+    const result = await server.getTransaction(hash);
+    if (result.status === "SUCCESS") return hash;
+    if (result.status === "FAILED") {
+      throw new PaymentError(
+        `Stellar rejected the transaction: ${JSON.stringify(result.resultXdr ?? "failed")}`,
+      );
+    }
+    // NOT_FOUND → not yet in a closed ledger; wait and retry.
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+  throw new PaymentError("Timed out waiting for the transaction to confirm");
 }
