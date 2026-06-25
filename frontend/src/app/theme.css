@@ -1,0 +1,167 @@
+/*
+ * DeFindex brand theme — design tokens.
+ * Palette and usage follow the DeFindex media kit:
+ * https://docs.defindex.io/contact-us/media-kit
+ */
+:root {
+  /* Palette */
+  --df-dark-green: #014751;
+  --df-lavender: #dec9f4;
+  --df-light-green: #d3ffb4;
+  --df-light-cyan: #d3fbff;
+  --df-coral: #fc5b31;
+  --df-white: #ffffff;
+
+  /* Semantic tokens */
+  --df-text: var(--df-dark-green);
+  --df-muted: rgba(1, 71, 81, 0.62);
+  --df-cta: var(--df-coral);
+  --df-cta-text: var(--df-white);
+  --df-border: rgba(1, 71, 81, 0.14);
+  --df-success: #0a7a3f;
+  --df-error: var(--df-coral);
+
+  /* Soft diffused brand gradient (cyan → light green → lavender) */
+  --df-bg: radial-gradient(
+      1200px 600px at 15% -5%,
+      var(--df-light-cyan) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      1000px 700px at 100% 0%,
+      var(--df-light-green) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      900px 800px at 50% 110%,
+      var(--df-lavender) 0%,
+      transparent 55%
+    ),
+    var(--df-white);
+
+  /* Glassmorphism surface */
+  --df-surface: rgba(255, 255, 255, 0.66);
+  --df-surface-border: rgba(255, 255, 255, 0.7);
+  --df-radius: 16px;
+  --df-shadow: 0 8px 30px rgba(1, 71, 81, 0.08);
+
+  --font-heading: var(--font-familjen), "Familjen Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-inter-tight), "Inter Tight", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--df-bg);
+  background-attachment: fixed;
+  color: var(--df-text);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+}
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.9em;
+}
+
+/* Glass card */
+.df-card {
+  background: var(--df-surface);
+  border: 1px solid var(--df-surface-border);
+  border-radius: var(--df-radius);
+  box-shadow: var(--df-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 1.25rem 1.4rem;
+}
+
+/* Buttons */
+.df-btn {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.6rem 1.15rem;
+  border: 1px solid transparent;
+  transition: transform 0.06s ease, filter 0.15s ease, background 0.15s ease;
+}
+.df-btn:active {
+  transform: translateY(1px);
+}
+.df-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Primary CTA — Coral */
+.df-btn-primary {
+  background: var(--df-cta);
+  color: var(--df-cta-text);
+}
+.df-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+/* Secondary — outline */
+.df-btn-secondary {
+  background: transparent;
+  color: var(--df-text);
+  border-color: var(--df-border);
+}
+.df-btn-secondary:hover:not(:disabled) {
+  background: rgba(1, 71, 81, 0.05);
+}
+
+/* Inputs */
+.df-input {
+  font: inherit;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--df-border);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--df-text);
+}
+.df-input:focus {
+  outline: none;
+  border-color: var(--df-coral);
+  box-shadow: 0 0 0 3px rgba(252, 91, 49, 0.18);
+}
+
+/* Status badge */
+.df-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+}
+.df-badge-on {
+  background: var(--df-light-green);
+  color: var(--df-dark-green);
+}
+.df-badge-off {
+  background: rgba(1, 71, 81, 0.08);
+  color: var(--df-muted);
+}
+
+.df-label {
+  color: var(--df-muted);
+  font-size: 0.9rem;
+}
